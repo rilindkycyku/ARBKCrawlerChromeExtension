@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="utf-8">
+  <style>
+    :root {
+      --bg: #f8f9fa;
+      --card-bg: white;
+      --text: #333;
+      --accent: #3498db;
+      --accent-hover: #2980b9;
+      --success: #27ae60;
+      --danger: #e74c3c;
+      --border: #eee;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a1a;
+        --card-bg: #2d2d2d;
+        --text: #e0e0e0;
+        --border: #444;
+        --shadow: 0 4px 12px rgba(0,0,0,0.3);
+      }
+    }
+    body {
+      width: 620px;
+      padding: 20px;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      min-height: 600px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 22px;
+      margin: 0 0 24px;
+      color: var(--accent);
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .help-card {
+      cursor: pointer;
+      user-select: none;
+    }
+    .help-card h3 {
+      margin: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .help-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      padding-top: 0;
+    }
+    .help-content.open {
+      max-height: 600px;
+      padding-top: 16px;
+    }
+    .help-content ul {
+      margin: 12px 0;
+      padding-left: 24px;
+    }
+    .help-content li {
+      margin: 8px 0;
+      line-height: 1.5;
+    }
+    h3 {
+      margin: 0 0 16px;
+      font-size: 17px;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    svg { width: 20px; height: 20px; fill: currentColor; }
+    input[type="text"], input[type="password"], input[type="file"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--card-bg);
+      color: var(--text);
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+    button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 15px;
+      margin-top: 10px;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    button:hover { background: var(--accent-hover); transform: translateY(-1px); }
+    button#downloadBtn { background: var(--success); }
+    button#downloadBtn:hover { background: #219a52; }
+    button#clearDbBtn { background: var(--danger); }
+    button#clearDbBtn:hover { background: #c0392b; }
+    progress {
+      width: 100%;
+      height: 12px;
+      border-radius: 6px;
+      margin: 12px 0;
+    }
+    #progressText {
+      text-align: center;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+    #status {
+      text-align: center;
+      padding: 12px;
+      border-radius: 10px;
+      margin: 16px 0;
+      font-weight: 500;
+      background: rgba(52,152,219,0.1);
+    }
+    #results {
+      max-height: 520px;
+      overflow-y: auto;
+      border-radius: 12px;
+      background: var(--card-bg);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.05);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th {
+      background: var(--accent);
+      color: white;
+      padding: 14px 10px;
+      text-align: left;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    td {
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
+    td:hover { background: rgba(52,152,219,0.15) !important; }
+    .copied-tooltip {
+      position: fixed;
+      background: #2c3e50;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .copied-tooltip.show { opacity: 1; }
+
+    #searchLoading {
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 999;
+      backdrop-filter: blur(4px);
+    }
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #f0f0f0;
+      border-top: 5px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (prefers-color-scheme: dark) {
+      #searchLoading { background: rgba(0,0,0,0.8); }
+      .spinner { border-color: #444; border-top-color: var(--accent); }
+    }
+  </style>
+  <script src="dexie.min.js"></script>
+  <script src="jszip.min.js"></script>
+</head>
+<body>
+  <h1>ARBK Kërkim Biznesesh Aktive</h1>
+
+  <!-- Udhëzues në shqip (collapsible) -->
+<div class="card help-card" id="helpCard">
+  <h3 id="helpToggle">
+    <svg><use href="#help"></use></svg> Si të përdoret kjo shtesë?
+    <span id="helpArrow" style="font-size:20px; transition: transform 0.3s;">▼</span>
+  </h3>
+  <div class="help-content" id="helpContent">
+    <p>Kjo shtesë ju lejon të kërkoni biznese aktive të regjistruara në ARBK pa internet pas importimit.</p>
+    <ul>
+      <li><strong>1. Shkarkoni të dhënat:</strong> Futni çelësin API (merrni falas në arbk.micro-devs.com), ruajeni dhe klikoni "Download ZIP".</li>
+      <li><strong>2. Importoni skedarin:</strong> Zgjidhni ZIP-in e shkarkuar (ose CSV-në brenda tij). Shtesa automatikisht nxjerr dhe importon vetëm bizneset aktive (Statusi: Regjistruar).</li>
+      <li><strong>3. Kërkoni:</strong> Shkruani emrin, NUI-n, komunën, telefonin etj. – rezultatet shfaqen menjëherë.</li>
+      <li><strong>Kopjim:</strong> Klikoni çdo qelizë (p.sh. telefon, email) për ta kopjuar direkt.</li>
+      <li><strong>Pastrim:</strong> Klikoni "Clear Database" për të liruar hapësirë (p.sh. para shkarkimit të versionit të ri).</li>
+    </ul>
+    <p><strong>Shënim:</strong> Të dhënat ruhen vetëm në shfletuesin tuaj – private dhe offline.</p>
+  </div>
+</div>
+
+  <div class="card">
+    <h3>
+      <svg><use href="#download"></use></svg> Shkarkoni të Dhënat e Fundit
+    </h3>
+    <input type="password" id="apiKey" placeholder="Çelësi juaj API" />
+    <button id="saveKey">Ruaj Çelësin</button>
+    <button id="downloadBtn">Shkarko ZIP</button>
+  </div>
+
+  <div class="card">
+    <h3>
+      <svg><use href="#import"></use></svg> Importo Skedarin
+    </h3>
+    <input type="file" id="fileInput" accept=".csv,.zip" />
+    <p style="font-size:13px; opacity:0.8; margin:8px 0 0;">Vetëm bizneset aktive do të importohen.</p>
+    <div id="importProgress" style="display:none; margin-top:16px;">
+      <progress id="progressBar" value="0" max="100"></progress>
+      <div id="progressText">Duke përpunuar...</div>
+    </div>
+    <button id="clearDbBtn">Pastro Bazën e të Dhënave</button>
+  </div>
+
+  <div class="card">
+    <h3>
+      <svg><use href="#search"></use></svg> Kërko Biznese Aktive
+    </h3>
+    <input type="text" id="query" placeholder="Shkruani për kërkim të menjëhershëm..." />
+  </div>
+
+  <div id="status"></div>
+  <div id="results"></div>
+
+  <div id="searchLoading">
+    <div class="spinner"></div>
+    <div style="font-size:18px; font-weight:600;">Duke kërkuar...</div>
+  </div>
+
+  <!-- SVG Icons -->
+  <svg style="display:none;">
+    <symbol id="download" viewBox="0 0 24 24">
+      <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+    </symbol>
+    <symbol id="import" viewBox="0 0 24 24">
+      <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+    </symbol>
+    <symbol id="search" viewBox="0 0 24 24">
+      <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+    </symbol>
+    <symbol id="help" viewBox="0 0 24 24">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+    </symbol>
+  </svg>
+
+  <script src="popup.js"></script>
+</body>
+</html>

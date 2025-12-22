@@ -1,0 +1,17 @@
+{
+  "name": "Kosovo ARBK Offline Search",
+  "description": "Download latest ARBK data (ZIP) via API key, auto-extract & import for fast offline search.",
+  "version": "1.4",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "icons": {
+    "128": "icon.png"
+  },
+  "permissions": [
+    "storage",
+    "unlimitedStorage"
+  ]
+}
