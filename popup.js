@@ -182,7 +182,7 @@ async function importCsv(file, onProgress) {
 }
 
 // Live search as you type
-document.getElementById('query').addEventListener('input', debounce(performSearch, 400));
+document.getElementById('query').addEventListener('input', debounce(performSearch, 700));
 
 function debounce(func, wait) {
   let timeout;
@@ -230,7 +230,6 @@ async function performSearch() {
       (row.Email && row.Email.toLowerCase().includes(lowerQuery)) ||
       (row.Vendi && row.Vendi.toLowerCase().includes(lowerQuery))
     )
-    .limit(200)
     .toArray();
 
   if (results.length < 20) {

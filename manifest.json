@@ -1,7 +1,7 @@
 {
-  "name": "Kosovo ARBK Offline Search",
-  "description": "Download latest ARBK data (ZIP) via API key, auto-extract & import for fast offline search.",
-  "version": "1.4",
+  "name": "ARBK - Kërko Biznesin",
+  "description": "Ky extension shërben për të bërë kërkim më të lehtë të bizneseve aktive nga ARBK duke përdour API nga arbk.micro-devs.com",
+  "version": "1.0",
   "manifest_version": 3,
   "action": {
     "default_popup": "popup.html",
