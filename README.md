@@ -1,19 +1,4 @@
-<!DOCTYPE html>
-<html lang="sq">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARBK Crawler Chrome Extension - README</title>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 40px auto; padding: 20px; }
-        h1, h2, h3 { color: #2c3e50; }
-        code { background: #f4f4f4; padding: 2px 5px; border-radius: 4px; }
-        pre { background: #f4f4f4; padding: 15px; border-radius: 8px; overflow-x: auto; }
-        a { color: #3498db; }
-        ul { margin: 15px 0; }
-        li { margin-bottom: 8px; }
-    </style>
-</head>
+
 <body>
 
 <h1>ARBK Crawler Chrome Extension</h1>
@@ -88,4 +73,3 @@
 </ul>
 
 </body>
-</html>
